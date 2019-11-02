@@ -2,10 +2,10 @@ package dev.nomadblacky.digdag.plugin.datadog
 
 import java.util
 
+import com.typesafe.scalalogging.StrictLogging
 import io.digdag.spi._
 import io.digdag.util.BaseOperator
 import javax.inject.Inject
-import org.slf4j.LoggerFactory
 
 class DatadogPlugin extends Plugin {
   override def getServiceProvider[T](`type`: Class[T]): Class[_ <: T] =
@@ -23,8 +23,8 @@ class DatadogEventOperatorFactory(val templateEngine: TemplateEngine) extends Op
 }
 
 private[datadog] class DatadogEventOperator(val _context: OperatorContext, val templateEngine: TemplateEngine)
-    extends BaseOperator(_context) {
-  private[this] val logger  = LoggerFactory.getLogger(classOf[DatadogEventOperator])
+    extends BaseOperator(_context)
+    with StrictLogging {
   private[this] val datadog = scaladog.Client()
 
   override def runTask(): TaskResult = {
@@ -33,7 +33,7 @@ private[datadog] class DatadogEventOperator(val _context: OperatorContext, val t
       text = "Digdag meets Datadog!!"
     )
 
-    logger.info("Succeeded to post an event to Datadog. {}", response.url)
+    logger.info(s"Succeeded to post an event to Datadog. ${response.url}")
 
     TaskResult.empty(request)
   }
