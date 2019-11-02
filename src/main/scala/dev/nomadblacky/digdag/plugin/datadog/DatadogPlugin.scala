@@ -24,9 +24,17 @@ class DatadogEventOperatorFactory(val templateEngine: TemplateEngine) extends Op
 
 private[datadog] class DatadogEventOperator(val _context: OperatorContext, val templateEngine: TemplateEngine)
     extends BaseOperator(_context) {
-  private[this] val logger = LoggerFactory.getLogger(classOf[DatadogEventOperator])
+  private[this] val logger  = LoggerFactory.getLogger(classOf[DatadogEventOperator])
+  private[this] val datadog = scaladog.Client()
+
   override def runTask(): TaskResult = {
-    logger.info("Hello, Digdag plugin!")
+    val response = datadog.events.postEvent(
+      title = "[TEST] digdag-datadog-plugin",
+      text = "Digdag meets Datadog!!"
+    )
+
+    logger.info("Succeeded to post an event to Datadog. {}", response.url)
+
     TaskResult.empty(request)
   }
 }
