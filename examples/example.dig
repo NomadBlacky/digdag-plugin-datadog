@@ -6,4 +6,6 @@ _export:
       - dev.nomadblacky:digdag-plugin-datadog_2.13:0.1.0-SNAPSHOT
 
 +example:
-  datadog_event>: aaa
+  datadog_event>:
+    title: "[TEST] digdag-plugin-datadog"
+    text: "Digdag meets Datadog!!"
