@@ -14,6 +14,28 @@ jobs:
     - name: Check the Scala format
       run: sbt scalafmtCheckAll scalafmtSbtCheck
 
+  check_unused_compile_dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: '1.8'
+      - name: Check unused compile dependencies
+        run: sbt test/unusedCompileDependenciesTest
+
+  check_undeclared_compile_dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: '1.8'
+      - name: Check undeclared compile dependencies
+        run: sbt test/undeclaredCompileDependenciesTest
+
   test:
     runs-on: ubuntu-latest
     steps:
