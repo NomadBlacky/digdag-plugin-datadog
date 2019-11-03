@@ -22,6 +22,7 @@ lazy val root = (project in file("."))
         "-Ywarn-numeric-widen"
       ),
     libraryDependencies ++= Seq(
+        "io.digdag"                  % "digdag-client"       % versions.digdag % Provided,
         "io.digdag"                  % "digdag-spi"          % versions.digdag % Provided,
         "io.digdag"                  % "digdag-plugin-utils" % versions.digdag % Provided,
         "dev.nomadblacky"            %% "scaladog"           % "0.4.1",
