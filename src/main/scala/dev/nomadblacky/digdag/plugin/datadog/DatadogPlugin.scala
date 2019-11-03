@@ -12,5 +12,5 @@ class DatadogPlugin extends Plugin {
 }
 
 class DatadogOperatorProvider @Inject() (templateEngine: TemplateEngine) extends OperatorProvider {
-  override def get(): util.List[OperatorFactory] = util.Arrays.asList(new DatadogEventOperatorFactory(templateEngine))
+  override def get(): util.List[OperatorFactory] = util.Arrays.asList(new DatadogEventOperatorFactory())
 }

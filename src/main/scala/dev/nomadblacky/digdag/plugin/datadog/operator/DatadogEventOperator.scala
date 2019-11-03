@@ -3,18 +3,19 @@ package dev.nomadblacky.digdag.plugin.datadog.operator
 import com.typesafe.scalalogging.StrictLogging
 import io.digdag.spi._
 import io.digdag.util.BaseOperator
+import scaladog.api.events.EventsAPIClient
 
-class DatadogEventOperatorFactory(val templateEngine: TemplateEngine) extends OperatorFactory {
+class DatadogEventOperatorFactory extends OperatorFactory {
   override val getType: String = DatadogEventOperator.Name
 
-  override def newOperator(context: OperatorContext): Operator = new DatadogEventOperator(context, templateEngine)
+  override def newOperator(context: OperatorContext): Operator = new DatadogEventOperator(context)
 }
 
-private[datadog] class DatadogEventOperator(val _context: OperatorContext, templateEngine: TemplateEngine)
-    extends BaseOperator(_context)
+private[operator] class DatadogEventOperator(
+    _context: OperatorContext,
+    eventsApi: EventsAPIClient = EventsAPIClient()
+) extends BaseOperator(_context)
     with StrictLogging {
-  private[this] val datadog = scaladog.Client()
-
   override def runTask(): TaskResult = {
     logger.info(s"Start the ${DatadogEventOperator.Name} operation.")
 
@@ -22,7 +23,7 @@ private[datadog] class DatadogEventOperator(val _context: OperatorContext, templ
 
     logger.debug(params.toString)
 
-    val response = datadog.events.postEvent(
+    val response = eventsApi.postEvent(
       title = params.get("title", classOf[String]),
       text = params.get("text", classOf[String])
     )
