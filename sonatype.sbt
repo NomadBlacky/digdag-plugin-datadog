@@ -9,7 +9,9 @@ licenses := Seq("MIT" -> url("https://github.com/NomadBlacky/digdag-plugin-datad
 
 // Where is the source code hosted
 import xerial.sbt.Sonatype._
-sonatypeProjectHosting := Some(GitHubHosting("NomadBlacky", "digdag-plugin-datadog", "tkadowaki.dev.blackey@gmail.com"))
+sonatypeProjectHosting := Some(
+  GitHubHosting("NomadBlacky", "digdag-plugin-datadog", "tkadowaki.dev.blackey@gmail.com")
+)
 
 // or if you want to set these fields manually
 homepage := Some(url("https://github.com/NomadBlacky/digdag-plugin-datadog"))
@@ -27,3 +29,5 @@ developers := List(
     url = url("https://www.nomadblacky.dev")
   )
 )
+
+ThisBuild / publishTo := sonatypePublishToBundle.value

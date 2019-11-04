@@ -1,3 +1,5 @@
+import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
+
 ThisBuild / scalaVersion := "2.13.1"
 ThisBuild / organization := "dev.nomadblacky"
 ThisBuild / organizationName := "NomadBlacky"
@@ -9,7 +11,7 @@ val versions = new {
   val digdag = "0.9.39"
 }
 
-lazy val root = (project in file("."))
+lazy val digdagPlguinDatadog = (project in file("."))
   .settings(
     name := "digdag-plugin-datadog",
     scalacOptions ++= Seq(
@@ -32,5 +34,19 @@ lazy val root = (project in file("."))
         "org.scalatest"              %% "scalatest"               % "3.0.8" % Test,
         "ch.qos.logback"             % "logback-classic"          % "1.2.3" % Test,
         "org.mockito"                %% "mockito-scala-scalatest" % "1.7.1" % Test
+      ),
+    releaseProcess := Seq[ReleaseStep](
+        checkSnapshotDependencies,
+        inquireVersions,
+        runClean,
+        runTest,
+        setReleaseVersion,
+        commitReleaseVersion,
+        tagRelease,
+        releaseStepCommandAndRemaining("publishSigned"),
+        releaseStepCommand("sonatypeBundleRelease"),
+        setNextVersion,
+        commitNextVersion,
+        pushChanges
       )
   )
