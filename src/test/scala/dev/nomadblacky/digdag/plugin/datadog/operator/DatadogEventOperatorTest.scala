@@ -1,10 +1,7 @@
 package dev.nomadblacky.digdag.plugin.datadog.operator
 
-import java.nio.file.Files
 import java.time.Instant
 
-import io.digdag.client.DigdagClient
-import io.digdag.client.config.ConfigFactory
 import io.digdag.spi.{OperatorContext, TaskResult}
 import org.mockito.scalatest.MockitoSugar
 import org.scalatest.FunSuite
@@ -14,20 +11,18 @@ import scaladog.api.events._
 
 class DatadogEventOperatorTest extends FunSuite with MockitoSugar with TestUtils {
   test("Return TaskResult.empty when operation is succeeded") {
-    val config = new ConfigFactory(DigdagClient.objectMapper()).fromJsonString(
-      """{
-        |  "_command": {
-        |    "title": "TITLE",
-        |    "text": "TEXT"
-        |  }
-        |}
-      """.stripMargin
+    val request = newTaskRequest(
+      newConfig(
+        ujson.Obj(
+          "title" -> "TITLE",
+          "text"  -> "TEXT"
+        )
+      )
     )
-    val request = newTaskRequest(config)
     val context = {
       val m = mock[OperatorContext]
       when(m.getTaskRequest).thenReturn(request)
-      when(m.getProjectPath).thenReturn(Files.createTempDirectory("op_test"))
+      when(m.getProjectPath).thenReturn(newTempDirectory())
       m
     }
     val operator = new DatadogEventOperator(context, new TestEventsAPIClient)

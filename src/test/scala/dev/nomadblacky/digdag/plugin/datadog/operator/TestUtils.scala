@@ -1,5 +1,6 @@
 package dev.nomadblacky.digdag.plugin.datadog.operator
 
+import java.nio.file.{Files, Path}
 import java.time.{Instant, ZoneId}
 import java.util.UUID
 
@@ -30,4 +31,13 @@ trait TestUtils {
       .localConfig(configFactory.create())
       .lastStateParams(configFactory.create())
       .build()
+
+  def newTempDirectory(): Path = Files.createTempDirectory("op_test")
+
+  def newConfig(command: ujson.Obj): Config = {
+    val json = ujson.Obj(
+      "_command" -> command
+    )
+    configFactory.fromJsonString(json.render())
+  }
 }
