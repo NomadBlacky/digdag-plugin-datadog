@@ -1,0 +1,12 @@
+_export:
+  plugin:
+#   Uncomment this if you try local development.
+#    repositories:
+#      - file:///<your_home_directory>/.m2/repository/
+    dependencies:
+      - dev.nomadblacky:digdag-plugin-datadog_2.13:0.1.0
+
++example:
+  datadog_event>:
+    title: "[TEST] digdag-plugin-datadog"
+    text: "Digdag meets Datadog!!"
