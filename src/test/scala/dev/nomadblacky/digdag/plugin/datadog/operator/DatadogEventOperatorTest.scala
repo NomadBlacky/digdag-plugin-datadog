@@ -2,32 +2,32 @@ package dev.nomadblacky.digdag.plugin.datadog.operator
 
 import java.time.Instant
 
-import io.digdag.spi.{OperatorContext, TaskResult}
-import org.mockito.scalatest.MockitoSugar
+import io.digdag.spi.{OperatorContext, TaskRequest, TaskResult}
 import org.scalatest.FunSuite
 import requests.Requester
 import scaladog.api.DatadogSite
 import scaladog.api.events._
 
-class DatadogEventOperatorTest extends FunSuite with MockitoSugar with TestUtils {
+class DatadogEventOperatorTest extends FunSuite with TestUtils {
   test("Return TaskResult.empty when operation is succeeded") {
-    val request = newTaskRequest(
-      newConfig(
-        ujson.Obj(
-          "title" -> "TITLE",
-          "text"  -> "TEXT"
-        )
+    val (request, context) = newContext(
+      ujson.Obj(
+        "title" -> "TITLE",
+        "text"  -> "TEXT"
       )
     )
-    val context = {
-      val m = mock[OperatorContext]
-      when(m.getTaskRequest).thenReturn(request)
-      when(m.getProjectPath).thenReturn(newTempDirectory())
-      m
-    }
     val operator = new DatadogEventOperator(context, new TestEventsAPIClient)
 
     assert(operator.runTask() === TaskResult.empty(request))
+  }
+
+  private def newContext(commands: ujson.Obj): (TaskRequest, OperatorContext) = {
+    val request = newTaskRequest(newConfig(commands))
+    val context = newMock[OperatorContext] { m =>
+      when(m.getTaskRequest).thenReturn(request)
+      when(m.getProjectPath).thenReturn(newTempDirectory())
+    }
+    (request, context)
   }
 }
 

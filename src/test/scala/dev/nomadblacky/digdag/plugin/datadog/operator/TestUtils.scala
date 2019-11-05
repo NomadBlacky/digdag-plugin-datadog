@@ -7,8 +7,12 @@ import java.util.UUID
 import io.digdag.client.DigdagClient
 import io.digdag.client.config.{Config, ConfigFactory}
 import io.digdag.spi.{ImmutableTaskRequest, TaskRequest}
+import org.mockito.scalatest.MockitoSugar
 
-trait TestUtils {
+import scala.reflect.ClassTag
+import scala.reflect.runtime.universe.WeakTypeTag
+
+trait TestUtils extends MockitoSugar {
   val configFactory = new ConfigFactory(DigdagClient.objectMapper())
 
   def newTaskRequest(config: Config): TaskRequest =
@@ -39,5 +43,11 @@ trait TestUtils {
       "_command" -> command
     )
     configFactory.fromJsonString(json.render())
+  }
+
+  def newMock[A <: AnyRef: ClassTag: WeakTypeTag](stubbing: A => Unit): A = {
+    val m = mock[A]
+    stubbing(m)
+    m
   }
 }
