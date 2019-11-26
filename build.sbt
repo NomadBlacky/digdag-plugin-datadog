@@ -32,7 +32,7 @@ lazy val digdagPlguinDatadog = (project in file("."))
         "org.slf4j"                  % "slf4j-api"                % "1.7.29",
         "javax.inject"               % "javax.inject"             % "1",
         "com.beachape"               %% "enumeratum"              % "1.5.13",
-        "com.google.guava"           % "guava"                    % "19.0",
+        "com.google.guava"           % "guava"                    % "23.0",
         "org.scalatest"              %% "scalatest"               % "3.0.8" % Test,
         "ch.qos.logback"             % "logback-classic"          % "1.2.3" % Test,
         "org.mockito"                %% "mockito-scala-scalatest" % "1.7.1" % Test
