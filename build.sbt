@@ -27,7 +27,7 @@ lazy val digdagPlguinDatadog = (project in file("."))
         "io.digdag"                  % "digdag-client"            % versions.digdag % Provided,
         "io.digdag"                  % "digdag-spi"               % versions.digdag % Provided,
         "io.digdag"                  % "digdag-plugin-utils"      % versions.digdag % Provided,
-        "dev.nomadblacky"            %% "scaladog"                % "0.4.1",
+        "dev.nomadblacky"            %% "scaladog"                % "0.4.2",
         "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.2",
         "org.slf4j"                  % "slf4j-api"                % "1.7.26",
         "javax.inject"               % "javax.inject"             % "1",
