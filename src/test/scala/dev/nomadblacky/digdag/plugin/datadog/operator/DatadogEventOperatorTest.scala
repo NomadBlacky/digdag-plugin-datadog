@@ -2,7 +2,7 @@ package dev.nomadblacky.digdag.plugin.datadog.operator
 
 import java.time.Instant
 
-import io.digdag.spi.{OperatorContext, TaskResult}
+import io.digdag.spi.{OperatorContext, SecretProvider, TaskRequest, TaskResult}
 import org.mockito.scalatest.MockitoSugar
 import org.scalatest.FunSuite
 import requests.Requester
@@ -11,27 +11,36 @@ import scaladog.api.events._
 
 class DatadogEventOperatorTest extends FunSuite with MockitoSugar with TestUtils {
   test("Return TaskResult.empty when operation is succeeded") {
-    val request = newTaskRequest(
-      newConfig(
-        ujson.Obj(
-          "title" -> "TITLE",
-          "text"  -> "TEXT"
-        )
+    val (request, context) = newContext(
+      ujson.Obj(
+        "title" -> "TITLE",
+        "text"  -> "TEXT"
       )
     )
-    val context = {
-      val m = mock[OperatorContext]
-      when(m.getTaskRequest).thenReturn(request)
-      when(m.getProjectPath).thenReturn(newTempDirectory())
-      m
-    }
-    val operator = new DatadogEventOperator(context, new TestEventsAPIClient)
+    val operator = new DatadogEventOperator(context, EventsAPIClientFactoryForTest)
 
     assert(operator.runTask() === TaskResult.empty(request))
   }
+
+  private def newContext(commands: ujson.Obj): (TaskRequest, OperatorContext) = {
+    val request = newTaskRequest(newConfig(commands))
+    val context = newMock[OperatorContext] { m =>
+      when(m.getTaskRequest).thenReturn(request)
+      when(m.getProjectPath).thenReturn(newTempDirectory())
+      when(m.getSecrets).thenReturn(new SecretProviderForTest(Map.empty))
+    }
+    (request, context)
+  }
 }
 
-class TestEventsAPIClient extends EventsAPIClient {
+object EventsAPIClientFactoryForTest extends APIClientFactory[EventsAPIClient] {
+  override def newClient(secrets: SecretProvider): Either[IllegalArgumentException, EventsAPIClient] =
+    Right(new EventsAPIClientForTest)
+  override protected def newClient(apiKey: String, appKey: String, site: DatadogSite): EventsAPIClient =
+    new EventsAPIClientForTest
+}
+
+class EventsAPIClientForTest extends EventsAPIClient {
   override def postEvent(
       title: String,
       text: String,
