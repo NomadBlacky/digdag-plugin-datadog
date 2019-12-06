@@ -4,12 +4,12 @@ import java.time.Instant
 
 import io.digdag.spi.{OperatorContext, SecretProvider, TaskRequest, TaskResult}
 import org.mockito.scalatest.MockitoSugar
-import org.scalatest.FunSuite
 import requests.Requester
 import scaladog.api.DatadogSite
 import scaladog.api.events._
+import org.scalatest.funsuite.AnyFunSuite
 
-class DatadogEventOperatorTest extends FunSuite with MockitoSugar with TestUtils {
+class DatadogEventOperatorTest extends AnyFunSuite with MockitoSugar with TestUtils {
   test("Return TaskResult.empty when operation is succeeded") {
     val (request, context) = newContext(
       ujson.Obj(

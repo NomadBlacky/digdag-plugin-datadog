@@ -1,11 +1,11 @@
 package dev.nomadblacky.digdag.plugin.datadog.operator
 
-import org.scalatest.FunSpec
 import org.scalatest.prop.{TableDrivenPropertyChecks, Tables}
 import scaladog.api.DatadogSite
 import scaladog.api.events.EventsAPIClient
+import org.scalatest.funspec.AnyFunSpec
 
-class APIClientFactoryTest extends FunSpec with TestUtils with Tables with TableDrivenPropertyChecks {
+class APIClientFactoryTest extends AnyFunSpec with TestUtils with Tables with TableDrivenPropertyChecks {
   type Env             = Map[String, String]
   type Secret          = Map[String, String]
   type LookupResult[A] = Either[IllegalArgumentException, A]
