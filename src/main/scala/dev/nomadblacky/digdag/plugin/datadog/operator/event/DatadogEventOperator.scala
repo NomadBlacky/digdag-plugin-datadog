@@ -1,6 +1,7 @@
-package dev.nomadblacky.digdag.plugin.datadog.operator
+package dev.nomadblacky.digdag.plugin.datadog.operator.event
 
 import com.typesafe.scalalogging.StrictLogging
+import dev.nomadblacky.digdag.plugin.datadog.operator.{APIClientFactory, DigdagConfigOps}
 import io.digdag.client.config.Config
 import io.digdag.spi._
 import io.digdag.util.BaseOperator
@@ -19,6 +20,7 @@ private[operator] class DatadogEventOperator(
     _context: OperatorContext,
     clientFactory: APIClientFactory[EventsAPIClient] = DefaultEventsAPIClientFactory
 ) extends BaseOperator(_context)
+    with DigdagConfigOps
     with StrictLogging {
   override def runTask(): TaskResult = {
     logger.info(s"Start the ${DatadogEventOperator.Name} operation.")

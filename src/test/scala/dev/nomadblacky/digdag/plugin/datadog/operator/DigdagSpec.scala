@@ -9,11 +9,12 @@ import io.digdag.client.DigdagClient
 import io.digdag.client.config.{Config, ConfigFactory}
 import io.digdag.spi.{ImmutableTaskRequest, SecretProvider, TaskRequest}
 import org.mockito.scalatest.MockitoSugar
+import org.scalatest.funspec.AnyFunSpec
 
 import scala.reflect.ClassTag
 import scala.reflect.runtime.universe.WeakTypeTag
 
-trait TestUtils extends MockitoSugar {
+trait DigdagSpec extends AnyFunSpec with MockitoSugar {
   val configFactory = new ConfigFactory(DigdagClient.objectMapper())
 
   def newTaskRequest(config: Config): TaskRequest =
@@ -39,12 +40,7 @@ trait TestUtils extends MockitoSugar {
 
   def newTempDirectory(): Path = Files.createTempDirectory("op_test")
 
-  def newConfig(command: ujson.Obj): Config = {
-    val json = ujson.Obj(
-      "_command" -> command
-    )
-    configFactory.fromJsonString(json.render())
-  }
+  def newConfig(json: ujson.Obj): Config = configFactory.fromJsonString(json.render())
 
   def newMock[A <: AnyRef: ClassTag: WeakTypeTag](stubbing: A => Unit): A = {
     val m = mock[A]

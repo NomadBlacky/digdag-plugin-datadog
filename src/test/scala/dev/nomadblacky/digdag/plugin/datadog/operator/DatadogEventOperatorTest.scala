@@ -2,28 +2,35 @@ package dev.nomadblacky.digdag.plugin.datadog.operator
 
 import java.time.Instant
 
+import dev.nomadblacky.digdag.plugin.datadog.operator.event.DatadogEventOperator
+import io.digdag.client.config.Config
 import io.digdag.spi.{OperatorContext, SecretProvider, TaskRequest, TaskResult}
-import org.mockito.scalatest.MockitoSugar
 import requests.Requester
 import scaladog.api.DatadogSite
 import scaladog.api.events._
-import org.scalatest.funsuite.AnyFunSuite
 
-class DatadogEventOperatorTest extends AnyFunSuite with MockitoSugar with TestUtils {
-  test("Return TaskResult.empty when operation is succeeded") {
-    val (request, context) = newContext(
-      ujson.Obj(
-        "title" -> "TITLE",
-        "text"  -> "TEXT"
+class DatadogEventOperatorTest extends DigdagSpec {
+
+  describe("runTask") {
+    it("returns TaskResult.empty when operation is succeeded") {
+      val (request, context) = newContext(
+        newConfig(
+          ujson.Obj(
+            "_command" -> ujson.Obj(
+              "title" -> "TITLE",
+              "text"  -> "TEXT"
+            )
+          )
+        )
       )
-    )
-    val operator = new DatadogEventOperator(context, EventsAPIClientFactoryForTest)
+      val operator = new DatadogEventOperator(context, EventsAPIClientFactoryForTest)
 
-    assert(operator.runTask() === TaskResult.empty(request))
+      assert(operator.runTask() === TaskResult.empty(request))
+    }
   }
 
-  private def newContext(commands: ujson.Obj): (TaskRequest, OperatorContext) = {
-    val request = newTaskRequest(newConfig(commands))
+  private def newContext(config: Config): (TaskRequest, OperatorContext) = {
+    val request = newTaskRequest(config)
     val context = newMock[OperatorContext] { m =>
       when(m.getTaskRequest).thenReturn(request)
       when(m.getProjectPath).thenReturn(newTempDirectory())

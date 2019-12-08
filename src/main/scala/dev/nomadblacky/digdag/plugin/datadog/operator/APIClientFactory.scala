@@ -3,7 +3,7 @@ package dev.nomadblacky.digdag.plugin.datadog.operator
 import io.digdag.spi.SecretProvider
 import scaladog.api.{APIClient, DatadogSite}
 
-trait APIClientFactory[A <: APIClient] {
+trait APIClientFactory[A <: APIClient] extends SecretProviderOps {
   private final val SecretKeyNameOfApiKey         = "datadog.api_key"
   private final val EnvKeyNameOfApiKey            = "DATADOG_API_KEY"
   private final val SecretKeyNameOfApplicationKey = "datadog.app_key"
