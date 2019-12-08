@@ -1,11 +1,10 @@
 package dev.nomadblacky.digdag.plugin.datadog.operator
 
 import io.digdag.client.config.{Config, ConfigException}
-import org.scalatest.funspec.AnyFunSpec
 
-class DigdagConfigOpsTest extends AnyFunSpec with TestUtils with DigdagConfigOps {
+class DigdagConfigOpsTest extends DigdagSpec with DigdagConfigOps {
 
-  val config: Config = configFactory.fromJsonString(
+  val config: Config = newConfig(
     ujson
       .Obj(
         "key" -> "value",
@@ -16,7 +15,6 @@ class DigdagConfigOpsTest extends AnyFunSpec with TestUtils with DigdagConfigOps
         ),
         "empty_list" -> ujson.Arr()
       )
-      .render()
   )
 
   describe("RichConfig") {

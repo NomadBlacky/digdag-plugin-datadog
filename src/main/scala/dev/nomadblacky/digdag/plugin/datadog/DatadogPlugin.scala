@@ -2,7 +2,7 @@ package dev.nomadblacky.digdag.plugin.datadog
 
 import java.util
 
-import dev.nomadblacky.digdag.plugin.datadog.operator.DatadogEventOperatorFactory
+import dev.nomadblacky.digdag.plugin.datadog.operator.event.DatadogEventOperatorFactory
 import io.digdag.spi._
 import javax.inject.Inject
 

@@ -1,8 +1,6 @@
 package dev.nomadblacky.digdag.plugin.datadog.operator
 
-import org.scalatest.funspec.AnyFunSpec
-
-class SecretProviderOpsTest extends AnyFunSpec with TestUtils with SecretProviderOps {
+class SecretProviderOpsTest extends DigdagSpec with SecretProviderOps {
 
   val secrets = new SecretProviderForTest(Map("key" -> "value"))
 
