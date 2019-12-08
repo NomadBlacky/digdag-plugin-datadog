@@ -10,3 +10,6 @@ _export:
   datadog_event>:
     title: "[TEST] digdag-plugin-datadog"
     text: "Digdag meets Datadog!!"
+    tags:
+      - "project:digdag-plugin-datadog"
+      - "env:test"

@@ -18,7 +18,11 @@ class DatadogEventOperatorTest extends DigdagSpec {
           ujson.Obj(
             "_command" -> ujson.Obj(
               "title" -> "TITLE",
-              "text"  -> "TEXT"
+              "text"  -> "TEXT",
+              "tags" -> ujson.Arr(
+                "project:digdag-plugin-datadog",
+                "env:test"
+              )
             )
           )
         )

@@ -41,7 +41,8 @@ private[operator] class DatadogEventOperator(
   private def postEvent(eventsApi: EventsAPIClient, params: Config): Try[PostEventResponse] = Try {
     eventsApi.postEvent(
       title = params[String]("title"),
-      text = params[String]("text")
+      text = params[String]("text"),
+      tags = params.getSeqOrEmpty[String]("tags")
     )
   }
 }
