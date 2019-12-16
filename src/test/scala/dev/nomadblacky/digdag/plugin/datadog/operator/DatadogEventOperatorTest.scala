@@ -4,7 +4,7 @@ import java.time.Instant
 
 import dev.nomadblacky.digdag.plugin.datadog.operator.event.DatadogEventOperator
 import io.digdag.client.config.Config
-import io.digdag.spi.{OperatorContext, SecretProvider, TaskRequest, TaskResult}
+import io.digdag.spi._
 import requests.Requester
 import scaladog.api.DatadogSite
 import scaladog.api.events._
@@ -12,24 +12,78 @@ import scaladog.api.events._
 class DatadogEventOperatorTest extends DigdagSpec {
 
   describe("runTask") {
-    it("returns TaskResult.empty when operation is succeeded") {
-      val (request, context) = newContext(
-        newConfig(
-          ujson.Obj(
-            "_command" -> ujson.Obj(
-              "title" -> "TITLE",
-              "text"  -> "TEXT",
-              "tags" -> ujson.Arr(
-                "project:digdag-plugin-datadog",
-                "env:test"
-              )
-            )
+
+    def requiredParams = ujson.Obj(
+      "_command" -> ujson.Obj(
+        "title" -> "TITLE",
+        "text"  -> "TEXT"
+      )
+    )
+
+    describe("when required params is set") {
+      describe("when operation is succeeded") {
+        val params = ujson.Obj(
+          "_command" -> ujson.Obj(
+            "title" -> "TITLE",
+            "text"  -> "TEXT",
+            "tags"  -> ujson.Arr("project:digdag-plugin-datadog")
           )
         )
-      )
-      val operator = new DatadogEventOperator(context, EventsAPIClientFactoryForTest)
+        val (request, context) = newContext(newConfig(params))
+        val client             = spy(new EventsAPIClientForTest)
+        val operator           = new DatadogEventOperator(context, new EventsAPIClientFactoryForTest(client))
 
-      assert(operator.runTask() === TaskResult.empty(request))
+        it("returns a TaskResult.empty") {
+          assert(operator.runTask() === TaskResult.empty(request))
+        }
+
+        it("invoked EventsAPIClient#postEvent with expected parameters") {
+          verify(client).postEvent(
+            title = eqTo("TITLE"),
+            text = eqTo("TEXT"),
+            dateHappened = any[Instant],
+            priority = any[Priority],
+            host = any[String],
+            tags = eqTo(Seq("project:digdag-plugin-datadog")),
+            alertType = any[AlertType],
+            aggregationKey = any[String],
+            sourceTypeName = any[String],
+            relatedEventId = any[Long],
+            deviceName = any[String]
+          )
+        }
+      }
+
+      it("throws a TaskExecutionException when operation is failed") {
+        val (_, context) = newContext(newConfig(requiredParams))
+        val client = {
+          val c = spy(new EventsAPIClientForTest)
+          when(c.postEvent(any, any, any, any, any, any, any, any, any, any, any)).thenThrow(new RuntimeException)
+          c
+        }
+        val factory  = new EventsAPIClientFactoryForTest(client)
+        val operator = new DatadogEventOperator(context, factory)
+
+        assertThrows[TaskExecutionException](operator.runTask())
+      }
+    }
+
+    it("throws a TaskExecutionException when `title` is missing") {
+      val params = requiredParams
+      params.obj("_command").obj.remove("title")
+      val (_, context) = newContext(newConfig(params))
+      val operator     = new DatadogEventOperator(context, new EventsAPIClientFactoryForTest)
+
+      assertThrows[TaskExecutionException](operator.runTask())
+    }
+
+    it("throws a TaskExecutionException when `text` is missing") {
+      val params = requiredParams
+      params.obj("_command").obj.remove("text")
+      val (_, context) = newContext(newConfig(params))
+      val operator     = new DatadogEventOperator(context, new EventsAPIClientFactoryForTest)
+
+      assertThrows[TaskExecutionException](operator.runTask())
     }
   }
 
@@ -44,9 +98,11 @@ class DatadogEventOperatorTest extends DigdagSpec {
   }
 }
 
-object EventsAPIClientFactoryForTest extends APIClientFactory[EventsAPIClient] {
+class EventsAPIClientFactoryForTest(eventsAPIClient: EventsAPIClient = new EventsAPIClientForTest)
+    extends APIClientFactory[EventsAPIClient] {
   override def newClient(secrets: SecretProvider): Either[IllegalArgumentException, EventsAPIClient] =
-    Right(new EventsAPIClientForTest)
+    Right(eventsAPIClient)
+
   override protected def newClient(apiKey: String, appKey: String, site: DatadogSite): EventsAPIClient =
     new EventsAPIClientForTest
 }
