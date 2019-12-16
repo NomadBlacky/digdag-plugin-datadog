@@ -13,3 +13,4 @@ _export:
     tags:
       - "project:digdag-plugin-datadog"
       - "env:test"
+    alert_type: success
