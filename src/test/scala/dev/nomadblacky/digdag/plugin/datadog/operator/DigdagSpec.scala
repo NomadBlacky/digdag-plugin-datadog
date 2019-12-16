@@ -8,13 +8,14 @@ import com.google.common.base.Optional
 import io.digdag.client.DigdagClient
 import io.digdag.client.config.{Config, ConfigFactory}
 import io.digdag.spi.{ImmutableTaskRequest, SecretProvider, TaskRequest}
+import org.mockito.ArgumentMatchersSugar
 import org.mockito.scalatest.MockitoSugar
 import org.scalatest.funspec.AnyFunSpec
 
 import scala.reflect.ClassTag
 import scala.reflect.runtime.universe.WeakTypeTag
 
-trait DigdagSpec extends AnyFunSpec with MockitoSugar {
+trait DigdagSpec extends AnyFunSpec with MockitoSugar with ArgumentMatchersSugar {
   val configFactory = new ConfigFactory(DigdagClient.objectMapper())
 
   def newTaskRequest(config: Config): TaskRequest =
