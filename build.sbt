@@ -8,7 +8,7 @@ ThisBuild / resolvers ++= Seq(
 )
 
 val versions = new {
-  val digdag = "0.9.39"
+  val digdag = "0.9.40"
 }
 
 val digdagDeps = Seq(
@@ -17,7 +17,7 @@ val digdagDeps = Seq(
   "io.digdag"        % "digdag-plugin-utils" % versions.digdag % Provided,
   "org.slf4j"        % "slf4j-api"           % "1.7.29",
   "javax.inject"     % "javax.inject"        % "1",
-  "com.google.guava" % "guava"               % "19.0"
+  "com.google.guava" % "guava"               % "27.1-jre"
 )
 
 lazy val digdagPlguinDatadog = (project in file("."))
