@@ -40,7 +40,7 @@ lazy val digdagPlguinDatadog = (project in file("."))
         "com.beachape"               %% "enumeratum"              % "1.5.14",
         "org.scalatest"              %% "scalatest"               % "3.1.0" % Test,
         "ch.qos.logback"             % "logback-classic"          % "1.2.3" % Test,
-        "org.mockito"                %% "mockito-scala-scalatest" % "1.10.0" % Test
+        "org.mockito"                %% "mockito-scala-scalatest" % "1.10.1" % Test
       ),
     releaseProcess := Seq[ReleaseStep](
         checkSnapshotDependencies,
