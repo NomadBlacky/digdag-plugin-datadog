@@ -43,7 +43,7 @@ class DatadogEventOperatorTest extends DigdagSpec {
             title = eqTo("TITLE"),
             text = eqTo("TEXT"),
             dateHappened = any[Instant],
-            priority = any[Priority],
+            priority = eqTo(Priority.Normal),
             host = any[String],
             tags = eqTo(Seq("project:digdag-plugin-datadog")),
             alertType = eqTo(AlertType.Success),
@@ -91,6 +91,15 @@ class DatadogEventOperatorTest extends DigdagSpec {
       it("throws a TaskExecutionException when `alert_type` is invalid") {
         val params = requiredParams
         params.obj("_command").obj("alert_type") = "foo"
+        val (_, context) = newContext(newConfig(params))
+        val operator     = new DatadogEventOperator(context, new EventsAPIClientFactoryForTest)
+
+        assertThrows[TaskExecutionException](operator.runTask())
+      }
+
+      it("throws a TaskExecutionException when `priority` is invalid") {
+        val params = requiredParams
+        params.obj("_command").obj("priority") = "foo"
         val (_, context) = newContext(newConfig(params))
         val operator     = new DatadogEventOperator(context, new EventsAPIClientFactoryForTest)
 

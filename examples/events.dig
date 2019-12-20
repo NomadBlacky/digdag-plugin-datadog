@@ -13,4 +13,5 @@ _export:
     tags:
       - "project:digdag-plugin-datadog"
       - "env:test"
-    alert_type: success
+    alert_type: info # is default. success, warning or error
+    priority: normal # is default. or low

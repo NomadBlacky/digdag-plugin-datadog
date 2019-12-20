@@ -6,7 +6,7 @@ import io.digdag.client.config.Config
 import io.digdag.spi._
 import io.digdag.util.BaseOperator
 import scaladog.api.DatadogSite
-import scaladog.api.events.{AlertType, EventsAPIClient, PostEventResponse}
+import scaladog.api.events.{AlertType, EventsAPIClient, PostEventResponse, Priority}
 
 import scala.util.{Failure, Try}
 
@@ -43,7 +43,8 @@ private[operator] class DatadogEventOperator(
       title = params[String]("title"),
       text = params[String]("text"),
       tags = params.getSeqOrEmpty[String]("tags"),
-      alertType = params.getOption[String]("alert_type").map(AlertType.withNameInsensitive).getOrElse(AlertType.Info)
+      alertType = params.getOption[String]("alert_type").map(AlertType.withNameInsensitive).getOrElse(AlertType.Info),
+      priority = params.getOption[String]("priority").map(Priority.withNameInsensitive).getOrElse(Priority.Normal)
     )
   }
 }
