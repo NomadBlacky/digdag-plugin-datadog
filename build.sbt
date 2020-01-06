@@ -35,7 +35,7 @@ lazy val digdagPlguinDatadog = (project in file("."))
     Test / scalacOptions -= "-Ywarn-dead-code",
     libraryDependencies ++= digdagDeps,
     libraryDependencies ++= Seq(
-        "dev.nomadblacky"            %% "scaladog"                % "0.4.2",
+        "dev.nomadblacky"            %% "scaladog"                % "0.4.3",
         "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.2",
         "com.beachape"               %% "enumeratum"              % "1.5.14",
         "org.scalatest"              %% "scalatest"               % "3.1.0" % Test,
