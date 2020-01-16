@@ -8,7 +8,7 @@ ThisBuild / resolvers ++= Seq(
 )
 
 val versions = new {
-  val digdag = "0.9.40"
+  val digdag = "0.9.41"
 }
 
 val digdagDeps = Seq(
