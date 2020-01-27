@@ -1,0 +1,19 @@
+pull_request_rules:
+  - name: assign and label scala-steward's PRs
+    conditions:
+      - author=scala-steward
+    actions:
+      assign:
+        users: [NomadBlacky]
+      label:
+        add: [dependency-updates]
+  - name: merge scala-steward's PRs
+    conditions:
+      - author=scala-steward
+      - "status-success=scalafmt"
+      - "status-success=check_unused_compile_dependencies"
+      - "status-success=check_undeclared_compile_dependencies"
+      - "status-success=test"
+    actions:
+      merge:
+        method: squash
