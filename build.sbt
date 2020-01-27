@@ -8,7 +8,7 @@ ThisBuild / resolvers ++= Seq(
 )
 
 val versions = new {
-  val digdag = "0.9.40"
+  val digdag = "0.9.41"
 }
 
 val digdagDeps = Seq(
@@ -37,10 +37,10 @@ lazy val digdagPlguinDatadog = (project in file("."))
     libraryDependencies ++= Seq(
         "dev.nomadblacky"            %% "scaladog"                % "0.4.2",
         "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.2",
-        "com.beachape"               %% "enumeratum"              % "1.5.14",
+        "com.beachape"               %% "enumeratum"              % "1.5.15",
         "org.scalatest"              %% "scalatest"               % "3.1.0" % Test,
         "ch.qos.logback"             % "logback-classic"          % "1.2.3" % Test,
-        "org.mockito"                %% "mockito-scala-scalatest" % "1.10.6" % Test
+        "org.mockito"                %% "mockito-scala-scalatest" % "1.11.0" % Test
       ),
     releaseProcess := Seq[ReleaseStep](
         checkSnapshotDependencies,
