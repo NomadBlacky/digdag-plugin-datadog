@@ -12,6 +12,7 @@ val versions = new {
 }
 
 val digdagDeps = Seq(
+  "io.digdag"        % "digdag-core"         % versions.digdag % Provided,
   "io.digdag"        % "digdag-client"       % versions.digdag % Provided,
   "io.digdag"        % "digdag-spi"          % versions.digdag % Provided,
   "io.digdag"        % "digdag-plugin-utils" % versions.digdag % Provided,
