@@ -10,6 +10,8 @@ categories:
       - 'fix'
       - 'bugfix'
       - 'bug'
+  - title: 'Documentation Updates'
+    label: 'documentation'
   - title: 'Dependency Updates'
     label: 'dependency-updates'
   - title: 'Builds'
