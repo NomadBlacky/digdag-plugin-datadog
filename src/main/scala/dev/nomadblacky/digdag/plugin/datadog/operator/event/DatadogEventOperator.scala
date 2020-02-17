@@ -2,6 +2,7 @@ package dev.nomadblacky.digdag.plugin.datadog.operator.event
 
 import com.typesafe.scalalogging.StrictLogging
 import dev.nomadblacky.digdag.plugin.datadog.operator.{APIClientFactory, DigdagConfigOps}
+import dev.nomadblacky.digdag.plugin.datadog.util.GoogleOptionalOps
 import io.digdag.client.config.Config
 import io.digdag.spi._
 import io.digdag.util.BaseOperator
@@ -39,17 +40,40 @@ private[operator] class DatadogEventOperator(
   }
 
   private def postEvent(eventsApi: EventsAPIClient, params: Config): Try[PostEventResponse] = Try {
+    val allTags = params.getSeqOrEmpty[String]("tags") ++ getTaskTags
     eventsApi.postEvent(
       title = params[String]("title"),
       text = params[String]("text"),
-      tags = params.getSeqOrEmpty[String]("tags"),
+      tags = allTags,
       alertType = params.getOption[String]("alert_type").map(AlertType.withNameInsensitive).getOrElse(AlertType.Info),
       priority = params.getOption[String]("priority").map(Priority.withNameInsensitive).getOrElse(Priority.Normal)
     )
   }
+
+  private def getTaskTags: Seq[String] =
+    Seq(
+      s"site_id:${request.getSiteId}",
+      s"project_id:${request.getProjectId}",
+      s"workflow_name:${request.getWorkflowName}",
+      s"task_id:${request.getTaskId}",
+      s"attempt_id:${request.getAttemptId}",
+      s"session_id:${request.getSessionId}",
+      s"task_name:${request.getTaskName}",
+      s"lock_id:${request.getLockId}",
+      s"time_zone:${request.getTimeZone}",
+      s"session_uuid:${request.getSessionUuid}",
+      s"session_time:${request.getSessionTime}",
+      s"created_at:${request.getCreatedAt}"
+    ).appendedAll(
+      Seq(
+        request.getProjectName.asScala.map(pn => s"project_name:$pn"),
+        request.getRevision.asScala.map(rv => s"revision:$rv"),
+        request.getRetryAttemptName.asScala.map(ran => s"retry_attempt_name:$ran")
+      ).flatten
+    )
 }
 
-object DatadogEventOperator {
+object DatadogEventOperator extends GoogleOptionalOps {
   final val Name = "datadog_event"
 }
 
