@@ -1,9 +1,10 @@
 package dev.nomadblacky.digdag.plugin.datadog.operator
 
+import dev.nomadblacky.digdag.plugin.datadog.util.GoogleOptionalOps
 import io.digdag.spi.SecretProvider
 import scaladog.api.{APIClient, DatadogSite}
 
-trait APIClientFactory[A <: APIClient] extends SecretProviderOps {
+trait APIClientFactory[A <: APIClient] extends GoogleOptionalOps {
   private final val SecretKeyNameOfApiKey         = "datadog.api_key"
   private final val EnvKeyNameOfApiKey            = "DATADOG_API_KEY"
   private final val SecretKeyNameOfApplicationKey = "datadog.app_key"
@@ -51,5 +52,5 @@ trait APIClientFactory[A <: APIClient] extends SecretProviderOps {
   }
 
   private def lookup(secrets: SecretProvider, secretKey: String, envKey: String): Option[String] =
-    secrets.getOption(secretKey).filter(_.nonEmpty).orElse(env.get(envKey).filter(_.nonEmpty))
+    secrets.getSecretOptional(secretKey).asScala.filter(_.nonEmpty).orElse(env.get(envKey).filter(_.nonEmpty))
 }
