@@ -42,7 +42,9 @@ _export:
 
 There are full examples in the [`examples`](./examples) directory.
 
-### datadog_event>: Send an event to Datadog.
+### datadog_event>:
+
+Send an event to Datadog with tags about task information.
 
 ```yaml
 +example:

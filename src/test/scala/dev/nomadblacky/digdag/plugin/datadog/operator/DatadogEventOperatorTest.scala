@@ -26,7 +26,7 @@ class DatadogEventOperatorTest extends DigdagSpec {
           "_command" -> ujson.Obj(
             "title"      -> "TITLE",
             "text"       -> "TEXT",
-            "tags"       -> ujson.Arr("project:digdag-plugin-datadog"),
+            "tags"       -> ujson.Arr("env:test"),
             "alert_type" -> "success"
           )
         )
@@ -39,13 +39,29 @@ class DatadogEventOperatorTest extends DigdagSpec {
         }
 
         it("invoked EventsAPIClient#postEvent with expected parameters") {
+          val tags = Seq(
+            "env:test",
+            s"site_id:${request.getSiteId}",
+            s"project_id:${request.getProjectId}",
+            s"workflow_name:${request.getWorkflowName}",
+            s"task_id:${request.getTaskId}",
+            s"attempt_id:${request.getAttemptId}",
+            s"session_id:${request.getSessionId}",
+            s"task_name:${request.getTaskName}",
+            s"lock_id:${request.getLockId}",
+            s"time_zone:${request.getTimeZone}",
+            s"session_uuid:${request.getSessionUuid}",
+            s"session_time:${request.getSessionTime}",
+            s"created_at:${request.getCreatedAt}",
+            s"revision:rev"
+          )
           verify(client).postEvent(
             title = eqTo("TITLE"),
             text = eqTo("TEXT"),
             dateHappened = any[Instant],
             priority = eqTo(Priority.Normal),
             host = any[String],
-            tags = eqTo(Seq("project:digdag-plugin-datadog")),
+            tags = eqTo(tags),
             alertType = eqTo(AlertType.Success),
             aggregationKey = any[String],
             sourceTypeName = any[String],
@@ -107,6 +123,8 @@ class DatadogEventOperatorTest extends DigdagSpec {
       }
     }
   }
+
+  describe("getTaskTags") {}
 
   private def newContext(config: Config): (TaskRequest, OperatorContext) = {
     val request = newTaskRequest(config)
