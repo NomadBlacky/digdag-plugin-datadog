@@ -14,21 +14,17 @@ class DatadogEventOperatorTest extends DigdagSpec {
   describe("runTask") {
 
     def requiredParams = ujson.Obj(
-      "_command" -> ujson.Obj(
-        "title" -> "TITLE",
-        "text"  -> "TEXT"
-      )
+      "title" -> "TITLE",
+      "text"  -> "TEXT"
     )
 
     describe("when required params is set") {
       describe("when operation is succeeded") {
         val params = ujson.Obj(
-          "_command" -> ujson.Obj(
-            "title"      -> "TITLE",
-            "text"       -> "TEXT",
-            "tags"       -> ujson.Arr("env:test"),
-            "alert_type" -> "success"
-          )
+          "title"      -> "TITLE",
+          "text"       -> "TEXT",
+          "tags"       -> ujson.Arr("env:test"),
+          "alert_type" -> "success"
         )
         val (request, context) = newContext(newConfig(params))
         val client             = spy(new EventsAPIClientForTest)
@@ -88,7 +84,7 @@ class DatadogEventOperatorTest extends DigdagSpec {
     describe("when invalid params is set") {
       it("throws a TaskExecutionException when `title` is missing") {
         val params = requiredParams
-        params.obj("_command").obj.remove("title")
+        params.obj.remove("title")
         val (_, context) = newContext(newConfig(params))
         val operator     = new DatadogEventOperator(context, new EventsAPIClientFactoryForTest)
 
@@ -97,7 +93,7 @@ class DatadogEventOperatorTest extends DigdagSpec {
 
       it("throws a TaskExecutionException when `text` is missing") {
         val params = requiredParams
-        params.obj("_command").obj.remove("text")
+        params.obj.remove("text")
         val (_, context) = newContext(newConfig(params))
         val operator     = new DatadogEventOperator(context, new EventsAPIClientFactoryForTest)
 
@@ -106,7 +102,7 @@ class DatadogEventOperatorTest extends DigdagSpec {
 
       it("throws a TaskExecutionException when `alert_type` is invalid") {
         val params = requiredParams
-        params.obj("_command").obj("alert_type") = "foo"
+        params.obj("alert_type") = "foo"
         val (_, context) = newContext(newConfig(params))
         val operator     = new DatadogEventOperator(context, new EventsAPIClientFactoryForTest)
 
@@ -115,7 +111,7 @@ class DatadogEventOperatorTest extends DigdagSpec {
 
       it("throws a TaskExecutionException when `priority` is invalid") {
         val params = requiredParams
-        params.obj("_command").obj("priority") = "foo"
+        params.obj("priority") = "foo"
         val (_, context) = newContext(newConfig(params))
         val operator     = new DatadogEventOperator(context, new EventsAPIClientFactoryForTest)
 

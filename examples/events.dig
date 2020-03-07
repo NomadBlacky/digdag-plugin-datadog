@@ -1,17 +1,17 @@
 _export:
   plugin:
-#   Uncomment this if you try local development.
-#    repositories:
-#      - file:///<your_home_directory>/.m2/repository/
+    repositories:
+      # Uncomment this if you testing the plugin published to local environment.
+      # And then you running `digdag run --no-save --param home=$HOME events.dig`
+      - file://${home}/.m2/repository/
     dependencies:
-      - dev.nomadblacky:digdag-plugin-datadog_2.13:0.3.0
+      - dev.nomadblacky:digdag-plugin-datadog_2.13:0.3.1-SNAPSHOT
 
 +example:
   datadog_event>:
-    title: "[TEST] digdag-plugin-datadog"
-    text: "Digdag meets Datadog!!"
-    tags:
-      - "project:digdag-plugin-datadog"
-      - "env:test"
-    alert_type: info # is default. success, warning or error
-    priority: normal # is default. or low
+  title: "[TEST] digdag-plugin-datadog"
+  text: "Digdag meets Datadog!!"
+  tags:
+    - "env:test"
+  alert_type: info # is default. success, warning or error
+  priority: normal # is default. or low
