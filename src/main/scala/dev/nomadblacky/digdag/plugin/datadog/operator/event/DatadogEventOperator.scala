@@ -26,7 +26,7 @@ private[operator] class DatadogEventOperator(
     logger.info(s"Start the ${DatadogEventOperator.Name} operation.")
 
     val operationT = for {
-      params    <- Try(request.getConfig.getNested("_command"))
+      params    <- Try(request.getConfig)
       _         = logger.debug(params.toString)
       eventsApi <- clientFactory.newClient(context.getSecrets).toTry
       response  <- postEvent(eventsApi, params)
