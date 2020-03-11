@@ -20,7 +20,7 @@ class DatadogEventOperatorTest extends DigdagSpec {
       )
     )
 
-    describe("when required params is set") {
+    describe("when required params are set") {
       describe("when operation is succeeded") {
         val params = ujson.Obj(
           "_command" -> ujson.Obj(
@@ -85,7 +85,7 @@ class DatadogEventOperatorTest extends DigdagSpec {
       }
     }
 
-    describe("when invalid params is set") {
+    describe("when invalid params are set") {
       it("throws a TaskExecutionException when `title` is missing") {
         val params = requiredParams
         params.obj("_command").obj.remove("title")
@@ -123,8 +123,6 @@ class DatadogEventOperatorTest extends DigdagSpec {
       }
     }
   }
-
-  describe("getTaskTags") {}
 
   private def newContext(config: Config): (TaskRequest, OperatorContext) = {
     val request = newTaskRequest(config)

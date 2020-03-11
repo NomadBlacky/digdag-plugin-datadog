@@ -2,7 +2,6 @@ package dev.nomadblacky.digdag.plugin.datadog.operator.event
 
 import com.typesafe.scalalogging.StrictLogging
 import dev.nomadblacky.digdag.plugin.datadog.operator.{APIClientFactory, DigdagConfigOps}
-import dev.nomadblacky.digdag.plugin.datadog.util.GoogleOptionalOps
 import io.digdag.client.config.Config
 import io.digdag.spi._
 import io.digdag.util.BaseOperator
@@ -73,7 +72,7 @@ private[operator] class DatadogEventOperator(
     )
 }
 
-object DatadogEventOperator extends GoogleOptionalOps {
+object DatadogEventOperator {
   final val Name = "datadog_event"
 }
 
