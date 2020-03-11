@@ -10,10 +10,7 @@ pull_request_rules:
   - name: merge scala-steward's PRs
     conditions:
       - author=scala-steward
-      - "status-success=scalafmt"
-      - "status-success=check_unused_compile_dependencies"
-      - "status-success=check_undeclared_compile_dependencies"
-      - "status-success=test"
+      - "status-success=sbt_tasks"
     actions:
       merge:
         method: squash
