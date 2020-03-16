@@ -11,6 +11,7 @@ pull_request_rules:
     conditions:
       - author=scala-steward
       - "status-success=sbt_tasks"
+      - "status-success=test_digdag"
     actions:
       merge:
         method: squash
