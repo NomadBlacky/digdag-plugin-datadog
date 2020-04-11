@@ -1,5 +1,6 @@
 package dev.nomadblacky.digdag.plugin.datadog.operator
 
+import io.digdag.spi.SecretProvider
 import org.scalatest.prop.{TableDrivenPropertyChecks, Tables}
 import scaladog.api.DatadogSite
 import scaladog.api.events.EventsAPIClient
@@ -11,7 +12,29 @@ class APIClientFactoryTest extends DigdagSpec with Tables with TableDrivenProper
 
   class APIClientFactoryForTest(override protected val env: Map[String, String])
       extends APIClientFactory[EventsAPIClient] {
-    override protected def newClient(apiKey: String, appKey: String, site: DatadogSite): EventsAPIClient = ???
+    override protected def newClient(apiKey: String, appKey: String, site: DatadogSite): EventsAPIClient =
+      mock[EventsAPIClient]
+  }
+
+  describe("newClient") {
+    it("returns a new client with lookup result keys") {
+      val factory = new APIClientFactory[EventsAPIClient] {
+        override protected def newClient(apiKey: String, appKey: String, site: DatadogSite): EventsAPIClient = {
+          assert(apiKey === "API_KEY")
+          assert(appKey === "APP_KEY")
+          assert(site === DatadogSite.US)
+          mock[EventsAPIClient]
+        }
+
+        override def lookupApiKey(secrets: SecretProvider): Either[IllegalArgumentException, String] =
+          Right("API_KEY")
+        override def lookupApplicationKey(secrets: SecretProvider): Either[IllegalArgumentException, String] =
+          Right("APP_KEY")
+        override def lookupSite(secrets: SecretProvider): Either[IllegalArgumentException, DatadogSite] =
+          Right(DatadogSite.US)
+      }
+      factory.newClient(new SecretProviderForTest(Map.empty))
+    }
   }
 
   describe("lookupApiKey") {
