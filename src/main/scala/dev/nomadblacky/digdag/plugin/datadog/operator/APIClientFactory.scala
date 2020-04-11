@@ -19,7 +19,7 @@ trait APIClientFactory[A <: APIClient] extends GoogleOptionalOps {
   def newClient(secrets: SecretProvider): Either[IllegalArgumentException, A] =
     for {
       apiKey <- lookupApiKey(secrets)
-      appKey <- lookupApiKey(secrets)
+      appKey <- lookupApplicationKey(secrets)
       site   <- lookupSite(secrets)
     } yield newClient(apiKey, appKey, site)
 
