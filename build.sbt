@@ -24,36 +24,36 @@ lazy val digdagPlguinDatadog = (project in file("."))
   .settings(
     name := "digdag-plugin-datadog",
     scalacOptions ++= Seq(
-        "-deprecation",
-        "-feature",
-        "-unchecked",
-        "-Xlint",
-        "-Xfatal-warnings",
-        "-Ywarn-dead-code",
-        "-Ywarn-numeric-widen"
-      ),
+      "-deprecation",
+      "-feature",
+      "-unchecked",
+      "-Xlint",
+      "-Xfatal-warnings",
+      "-Ywarn-dead-code",
+      "-Ywarn-numeric-widen"
+    ),
     Test / scalacOptions -= "-Ywarn-dead-code",
     libraryDependencies ++= digdagDeps,
     libraryDependencies ++= Seq(
-        "dev.nomadblacky"            %% "scaladog"                % "0.5.0",
-        "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.2",
-        "com.beachape"               %% "enumeratum"              % "1.5.15",
-        "org.scalatest"              %% "scalatest"               % "3.1.1" % Test,
-        "ch.qos.logback"             % "logback-classic"          % "1.2.3" % Test,
-        "org.mockito"                %% "mockito-scala-scalatest" % "1.10.4" % Test
-      ),
+      "dev.nomadblacky"            %% "scaladog"                % "0.5.0",
+      "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.2",
+      "com.beachape"               %% "enumeratum"              % "1.5.15",
+      "org.scalatest"              %% "scalatest"               % "3.1.1"  % Test,
+      "ch.qos.logback"              % "logback-classic"         % "1.2.3"  % Test,
+      "org.mockito"                %% "mockito-scala-scalatest" % "1.10.4" % Test
+    ),
     releaseProcess := Seq[ReleaseStep](
-        checkSnapshotDependencies,
-        inquireVersions,
-        runClean,
-        runTest,
-        setReleaseVersion,
-        commitReleaseVersion,
-        tagRelease,
-        releaseStepCommandAndRemaining("publishSigned"),
-        releaseStepCommand("sonatypeBundleRelease"),
-        setNextVersion,
-        commitNextVersion,
-        pushChanges
-      )
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      runTest,
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      releaseStepCommandAndRemaining("publishSigned"),
+      releaseStepCommand("sonatypeBundleRelease"),
+      setNextVersion,
+      commitNextVersion,
+      pushChanges
+    )
   )
