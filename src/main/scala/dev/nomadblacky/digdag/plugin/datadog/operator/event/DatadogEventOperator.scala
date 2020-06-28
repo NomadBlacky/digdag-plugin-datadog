@@ -27,10 +27,10 @@ private[operator] class DatadogEventOperator(
 
     val operationT = for {
       params    <- Try(request.getConfig.getNested("_command"))
-      _         = logger.debug(params.toString)
+      _          = logger.debug(params.toString)
       eventsApi <- clientFactory.newClient(context.getSecrets).toTry
       response  <- postEvent(eventsApi, params)
-      _         = logger.info(s"Succeeded to post the event to Datadog. ${response.url}")
+      _          = logger.info(s"Succeeded to post the event to Datadog. ${response.url}")
     } yield TaskResult.empty(request)
 
     operationT.recoverWith {
@@ -38,16 +38,17 @@ private[operator] class DatadogEventOperator(
     }.get
   }
 
-  private def postEvent(eventsApi: EventsAPIClient, params: Config): Try[PostEventResponse] = Try {
-    val allTags = params.getSeqOrEmpty[String]("tags") ++ getTaskTags
-    eventsApi.postEvent(
-      title = params[String]("title"),
-      text = params[String]("text"),
-      tags = allTags,
-      alertType = params.getOption[String]("alert_type").map(AlertType.withNameInsensitive).getOrElse(AlertType.Info),
-      priority = params.getOption[String]("priority").map(Priority.withNameInsensitive).getOrElse(Priority.Normal)
-    )
-  }
+  private def postEvent(eventsApi: EventsAPIClient, params: Config): Try[PostEventResponse] =
+    Try {
+      val allTags = params.getSeqOrEmpty[String]("tags") ++ getTaskTags
+      eventsApi.postEvent(
+        title = params[String]("title"),
+        text = params[String]("text"),
+        tags = allTags,
+        alertType = params.getOption[String]("alert_type").map(AlertType.withNameInsensitive).getOrElse(AlertType.Info),
+        priority = params.getOption[String]("priority").map(Priority.withNameInsensitive).getOrElse(Priority.Normal)
+      )
+    }
 
   private def getTaskTags: Seq[String] =
     Seq(
