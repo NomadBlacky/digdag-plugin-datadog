@@ -13,12 +13,13 @@ class DatadogEventOperatorTest extends DigdagSpec {
 
   describe("runTask") {
 
-    def requiredParams = ujson.Obj(
-      "_command" -> ujson.Obj(
-        "title" -> "TITLE",
-        "text"  -> "TEXT"
+    def requiredParams =
+      ujson.Obj(
+        "_command" -> ujson.Obj(
+          "title" -> "TITLE",
+          "text"  -> "TEXT"
+        )
       )
-    )
 
     describe("when required params are set") {
       describe("when operation is succeeded") {
