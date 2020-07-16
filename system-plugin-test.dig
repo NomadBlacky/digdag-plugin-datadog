@@ -1,0 +1,7 @@
+timezone: Asia/Tokyo
+
++task:
+  echo>: "foo!"
+
++failed:
+  fail>: "oops!!"
