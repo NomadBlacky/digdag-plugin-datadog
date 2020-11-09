@@ -38,7 +38,7 @@ lazy val digdagPlguinDatadog = (project in file("."))
       "dev.nomadblacky"            %% "scaladog"                % "0.5.1",
       "com.typesafe.scala-logging" %% "scala-logging"           % "3.9.2",
       "com.beachape"               %% "enumeratum"              % "1.6.1",
-      "org.scalatest"              %% "scalatest"               % "3.2.0"  % Test,
+      "org.scalatest"              %% "scalatest"               % "3.2.3"  % Test,
       "ch.qos.logback"              % "logback-classic"         % "1.2.3"  % Test,
       "org.mockito"                %% "mockito-scala-scalatest" % "1.10.4" % Test
     ),
